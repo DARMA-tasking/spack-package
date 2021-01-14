@@ -1,10 +1,46 @@
-# DARMA-tasking template repository
+# spack-package
 
-Template repository with base configuration.
+This repository is a spack repo for _DARMA/vt_ and its required dependencies.
 
-Included workflows:
-* [*check-pr-fixes-issue*](https://github.com/DARMA-tasking/check-pr-fixes-issue) - checking if PR description contains phrase "Fixes #issue", and if PR title, description and branch mention the same issue number
-* [*find-unsigned-commits*](https://github.com/DARMA-tasking/find-unsigned-commits) - checking if there are any unsigned commits in PR
-* [*find-trailing-whitespace*](https://github.com/DARMA-tasking/find-trailing-whitespace) - checking if there are any trailing whitespaces in files
-* [*check-commit-format*](https://github.com/DARMA-tasking/check-commit-format) - checking if commit message is properly formatted - either starts with "*Merge ...*" or fullfils template: "*#issue_number: short commit description*"
-* [*action-git-diff-check*](https://github.com/joel-coffman/action-git-diff-check) - checking if changes introduce conflict markers or whitespace errors
+## Installing
+
+Make sure [spack](https://github.com/spack/spack) is installed.
+
+```sh
+spack repo add /path/to/spack-package/
+```
+
+### Note about spack on clusters
+
+It's important that spack uses the right version of mpi or it may try to build mpi from source. Similarly, it may be useful for it to be configured to use the system's cmake.
+
+Edit `~/.spack/packages.yaml`. For example:
+
+```yaml
+packages:
+  openmpi:
+    paths:
+      openmpi@3.1.3%gcc@8.2.0: /path/to/system/openmpi
+  cmake:
+    paths:
+    cmake@3.13.2: /path/to/system/cmake
+
+```
+
+This avoids spack trying to build openmpi and cmake from source. To check what a particular install command will install, use:
+
+```sh
+spack install --fake <package_name>
+```
+
+However, you will have to uninstall the packages afterwards.
+
+## Usage
+
+Now, darma-vt is accessible to your spack instance.
+
+```sh
+spack install darma-vt
+```
+
+By default it will install version 1.0. You can speecify `darma-vt@develop` to install the latest development version.
