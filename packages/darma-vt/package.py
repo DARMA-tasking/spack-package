@@ -59,13 +59,13 @@ class DarmaVt(CMakePackage):
     version("develop", branch="develop")
 
     depends_on("mpi")
-    depends_on("detector")
-    depends_on("checkpoint")
+    depends_on("darma-detector")
+    depends_on("darma-checkpoint")
 
     def cmake_args(self):
         args = [
-            "-Ddetector_DIR={}".format(self.spec["detector"].prefix),
-            "-Dcheckpoint_DIR={}".format(self.spec["checkpoint"].prefix),
+            "-Ddetector_DIR={}".format(self.spec["darma-detector"].prefix),
+            "-Dcheckpoint_DIR={}".format(self.spec["darma-checkpoint"].prefix),
             "-Denable_gtest=OFF",
             "-DVT_NO_BUILD_TESTS=ON",
             "-DVT_NO_BUILD_EXAMPLES=ON",

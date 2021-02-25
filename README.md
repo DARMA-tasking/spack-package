@@ -43,4 +43,4 @@ Now, darma-vt is accessible to your spack instance.
 spack install darma-vt
 ```
 
-By default it will install version 1.0. You can speecify `darma-vt@develop` to install the latest development version.
+By default it will install version 1.0. You can specify `darma-vt@develop` to install the latest development version.
