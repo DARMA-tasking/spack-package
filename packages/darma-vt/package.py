@@ -78,8 +78,6 @@ class DarmaVt(CMakePackage):
             description='Build with Zoltan enabled for ZoltanLB support')
     variant('mpi_guards', values=("0", "1"), default="0",
             description='Guards against mis-use of MPI calls in code using vt')
-    variant('fcontext_enabled', values=("0", "1"), default="0",
-            description='Enable user-level threads through boost fcontext')
     variant('priorities_enabled', values=("0", "1"), default="1",
             description='Enable prioritization of work')
     variant('diagnostics_enabled', values=("0", "1"), default="1",
@@ -119,7 +117,6 @@ class DarmaVt(CMakePackage):
             '-Dvt_pool_enabled={}'.format(int(self.spec.variants['pool_enabled'].value)),
             '-Dvt_zoltan_enabled={}'.format(int(self.spec.variants['zoltan_enabled'].value)),
             '-Dvt_mpi_guards={}'.format(int(self.spec.variants['mpi_guards'].value)),
-            '-Dvt_fcontext_enabled={}'.format(int(self.spec.variants['fcontext_enabled'].value)),
             '-Dvt_priorities_enabled={}'.format(int(self.spec.variants['priorities_enabled'].value)),
             '-Dvt_diagnostics_enabled={}'.format(int(self.spec.variants['diagnostics_enabled'].value)),
             '-Dvt_diagnostics_runtime_enabled={}'.format(int(self.spec.variants['diagnostics_runtime_enabled'].value)),
