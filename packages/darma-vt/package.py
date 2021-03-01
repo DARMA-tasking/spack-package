@@ -88,7 +88,7 @@ class DarmaVt(CMakePackage):
             description='Number of bits per level of priority in envelope')
     variant('unity_build_enabled', values=("0", "1"), default="0",
             description='Build with Unity/Jumbo mode enabled (requires CMake >= 3.16)')
-    variant('fcontext_enabled', values=("0", "1"), default="1",
+    variant('fcontext_enabled', values=("0", "1"), default="0",
             description='Force use of fcontext for threading')
     variant('use_openmp', values=("0", "1"), default="0",
             description='Force use of OpenMP for threading')
