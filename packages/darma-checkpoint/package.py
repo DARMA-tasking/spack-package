@@ -46,6 +46,12 @@ class DarmaCheckpoint(CMakePackage):
 
     depends_on("darma-detector")
 
+    sanity_check_is_dir = ['include/checkpoint']
+    sanity_check_is_file = ['cmake/checkpointConfig.cmake']
+    sanity_check_is_file = ['cmake/checkpointTargets.cmake']
+    sanity_check_is_file = ['cmake/checkpointTargets-relwithdebinfo.cmake']
+    sanity_check_is_file = ['lib/libcheckpoint.a']
+
     def cmake_args(self):
         args = ["-Ddetector_DIR={}".format(self.spec["darma-detector"].prefix)]
         return args

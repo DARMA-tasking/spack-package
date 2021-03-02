@@ -99,6 +99,12 @@ class DarmaVt(CMakePackage):
     depends_on("darma-detector")
     depends_on("darma-checkpoint")
 
+    sanity_check_is_dir = ['include/vt']
+    sanity_check_is_file = ['cmake/vtConfig.cmake']
+    sanity_check_is_file = ['cmake/vtTargets.cmake']
+    sanity_check_is_file = ['cmake/vtTargets-relwithdebinfo.cmake']
+    sanity_check_is_file = ['lib/libvt-relwithdebinfo.a']
+
     def cmake_args(self):
         args = [
             "-Ddetector_DIR={}".format(self.spec["darma-detector"].prefix),

@@ -49,3 +49,12 @@ class DarmaDetector(CMakePackage):
     git      = "git@github.com:DARMA-tasking/detector.git"
 
     version("master", branch="master")
+
+    sanity_check_is_file = ['cmake/detectorConfig.cmake']
+    sanity_check_is_file = ['cmake/detectorTargets.cmake']
+    sanity_check_is_file = ['include/detector.h']
+    sanity_check_is_file = ['include/detector_common.h']
+    sanity_check_is_file = ['include/detector_headers.h']
+    sanity_check_is_file = ['include/none_such.h']
+    sanity_check_is_file = ['include/traits.h']
+    sanity_check_is_file = ['include/void_t.h']
