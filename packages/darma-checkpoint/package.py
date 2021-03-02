@@ -36,16 +36,22 @@
 from spack import *
 
 
-class Detector(CMakePackage):
-    """Minimal C++ detection idiom implementation
+class DarmaCheckpoint(CMakePackage):
+    """Serialization and checkpointing library"""
 
-    detector is a small library that implements static/compile-time type
-    introspection in C++. With this code, we can check if a type has methods,
-    type aliases, or members that are exactly matching or convertible to a
-    particular interface. Because this library requires C++-14, it is separated
-    from the other DARMA/* libraries."""
+    homepage = "https://github.com/DARMA-tasking/checkpoint"
+    git      = "git@github.com:DARMA-tasking/checkpoint.git"
 
-    homepage = "https://github.com/DARMA-tasking/detector"
-    git      = "git@github.com:DARMA-tasking/detector.git"
+    version("develop", branch="develop")
 
-    version("master", branch="master")
+    depends_on("darma-detector")
+
+    sanity_check_is_dir = ['include/checkpoint']
+    sanity_check_is_file = ['cmake/checkpointConfig.cmake']
+    sanity_check_is_file = ['cmake/checkpointTargets.cmake']
+    sanity_check_is_file = ['cmake/checkpointTargets-relwithdebinfo.cmake']
+    sanity_check_is_file = ['lib/libcheckpoint.a']
+
+    def cmake_args(self):
+        args = ["-Ddetector_DIR={}".format(self.spec["darma-detector"].prefix)]
+        return args
