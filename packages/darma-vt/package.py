@@ -53,7 +53,7 @@ class DarmaVt(CMakePackage):
     management."""
 
     homepage = "https://github.com/DARMA-tasking/vt"
-    git      = "git@github.com:DARMA-tasking/vt.git"
+    git      = "https://github.com/DARMA-tasking/vt.git"
 
     version("1.0.0", tag="1.0.0")
     version("develop", branch="develop")

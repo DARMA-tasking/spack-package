@@ -46,7 +46,7 @@ class DarmaDetector(CMakePackage):
     from the other DARMA/* libraries."""
 
     homepage = "https://github.com/DARMA-tasking/detector"
-    git      = "git@github.com:DARMA-tasking/detector.git"
+    git      = "https://github.com/DARMA-tasking/detector.git"
 
     version("master", branch="master")
 
