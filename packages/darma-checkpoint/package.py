@@ -40,7 +40,7 @@ class DarmaCheckpoint(CMakePackage):
     """Serialization and checkpointing library"""
 
     homepage = "https://github.com/DARMA-tasking/checkpoint"
-    git      = "git@github.com:DARMA-tasking/checkpoint.git"
+    git      = "https://github.com/DARMA-tasking/checkpoint.git"
 
     version("develop", branch="develop")
 
