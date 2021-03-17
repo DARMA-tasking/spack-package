@@ -94,10 +94,8 @@ class DarmaVt(CMakePackage):
             description='Force use of OpenMP for threading')
     variant('use_std_thread', values=("0", "1"), default="0",
             description='Force use of std::thread for threading')
-    variant('build_tests', values=("0", "1"), default="0",
-            description='Build all VT tests')
-    variant('build_examples', values=("0", "1"), default="0",
-            description='Build all VT examples')
+    variant('build_tests', default=False, description='Build all VT tests')
+    variant('build_examples', default=False, description='Build all VT examples')
 
     depends_on("mpi")
     depends_on("darma-detector")
