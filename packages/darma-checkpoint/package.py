@@ -49,7 +49,6 @@ class DarmaCheckpoint(CMakePackage):
     sanity_check_is_dir = ['include/checkpoint']
     sanity_check_is_file = ['cmake/checkpointConfig.cmake']
     sanity_check_is_file = ['cmake/checkpointTargets.cmake']
-    sanity_check_is_file = ['cmake/checkpointTargets-relwithdebinfo.cmake']
     sanity_check_is_file = ['lib/libcheckpoint.a']
 
     def cmake_args(self):

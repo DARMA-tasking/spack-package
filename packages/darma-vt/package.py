@@ -94,6 +94,8 @@ class DarmaVt(CMakePackage):
             description='Force use of OpenMP for threading')
     variant('use_std_thread', values=("0", "1"), default="0",
             description='Force use of std::thread for threading')
+    variant('build_tests', default=False, description='Build all VT tests')
+    variant('build_examples', default=False, description='Build all VT examples')
 
     depends_on("mpi")
     depends_on("darma-detector")
@@ -102,8 +104,6 @@ class DarmaVt(CMakePackage):
     sanity_check_is_dir = ['include/vt']
     sanity_check_is_file = ['cmake/vtConfig.cmake']
     sanity_check_is_file = ['cmake/vtTargets.cmake']
-    sanity_check_is_file = ['cmake/vtTargets-relwithdebinfo.cmake']
-    sanity_check_is_file = ['lib/libvt-relwithdebinfo.a']
 
     def cmake_args(self):
         args = [
@@ -131,6 +131,8 @@ class DarmaVt(CMakePackage):
             '-Dvt_fcontext_enabled={}'.format(int(self.spec.variants['fcontext_enabled'].value)),
             '-DUSE_OPENMP={}'.format(int(self.spec.variants['use_openmp'].value)),
             '-DUSE_STD_THREAD={}'.format(int(self.spec.variants['use_std_thread'].value)),
+            '-DVT_BUILD_TESTS={}'.format(int(self.spec.variants['build_tests'].value)),
+            '-DVT_BUILD_EXAMPLES={}'.format(int(self.spec.variants['build_examples'].value)),
         ]
 
         return args
