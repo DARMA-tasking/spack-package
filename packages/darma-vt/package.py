@@ -109,10 +109,6 @@ class DarmaVt(CMakePackage):
         args = [
             "-Ddetector_DIR={}".format(self.spec["darma-detector"].prefix),
             "-Dcheckpoint_DIR={}".format(self.spec["darma-checkpoint"].prefix),
-            "-Denable_gtest=OFF",
-            "-DVT_NO_BUILD_TESTS=ON",
-            "-DVT_NO_BUILD_EXAMPLES=ON",
-            "-DVT_THREADING_BACKEND=none",
             '-Dvt_lb_enabled={}'.format(int(self.spec.variants['lb_enabled'].value)),
             '-Dvt_trace_enabled={}'.format(int(self.spec.variants['trace_enabled'].value)),
             '-Dvt_trace_only={}'.format(int(self.spec.variants['trace_only'].value)),
