@@ -60,80 +60,67 @@ class DarmaVt(CMakePackage):
 
     variant(
         "lb_enabled",
-        values=("0", "1"),
-        default="1",
+        default=True,
         description="Compile with support for runtime load balancing",
     )
     variant(
         "trace_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Compile with support for runtime tracing",
     )
     variant(
         "trace_only",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Compile vt in trace-only mode",
     )
     variant(
         "doxygen_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Enable doxygen generation",
     )
     variant(
         "mimalloc_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Enable mimalloc, alternative allocator for debugging memory usage/frees/corruption",
     )
     variant(
         "asan_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Enable building with address sanitizer",
     )
     variant(
         "werror_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Treat all warnings as errors",
     )
     variant(
         "pool_enabled",
-        values=("0", "1"),
-        default="1",
+        default=True,
         description="Use memory pool in vt for message allocation",
     )
     variant(
         "zoltan_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Build with Zoltan enabled for ZoltanLB support",
     )
     variant(
         "mpi_guards",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Guards against mis-use of MPI calls in code using vt",
     )
     variant(
         "priorities_enabled",
-        values=("0", "1"),
-        default="1",
+        default=True,
         description="Enable prioritization of work",
     )
     variant(
         "diagnostics_enabled",
-        values=("0", "1"),
-        default="1",
+        default=True,
         description="Enable VT component diagnostics for performance analysis",
     )
     variant(
         "diagnostics_runtime_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Enable VT component diagnostics at runtime by default",
     )
     variant(
@@ -144,26 +131,22 @@ class DarmaVt(CMakePackage):
     )
     variant(
         "unity_build_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Build with Unity/Jumbo mode enabled (requires CMake >= 3.16)",
     )
     variant(
         "fcontext_enabled",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Force use of fcontext for threading",
     )
     variant(
         "use_openmp",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Force use of OpenMP for threading",
     )
     variant(
         "use_std_thread",
-        values=("0", "1"),
-        default="0",
+        default=False,
         description="Force use of std::thread for threading",
     )
     variant("build_tests", default=False, description="Build all VT tests")
