@@ -40,16 +40,16 @@ class DarmaCheckpoint(CMakePackage):
     """Serialization and checkpointing library"""
 
     homepage = "https://github.com/DARMA-tasking/checkpoint"
-    git      = "https://github.com/DARMA-tasking/checkpoint.git"
+    git = "https://github.com/DARMA-tasking/checkpoint.git"
 
     version("develop", branch="develop")
 
     depends_on("darma-detector")
 
-    sanity_check_is_dir = ['include/checkpoint']
-    sanity_check_is_file = ['cmake/checkpointConfig.cmake']
-    sanity_check_is_file = ['cmake/checkpointTargets.cmake']
-    sanity_check_is_file = ['lib/libcheckpoint.a']
+    sanity_check_is_dir = ["include/checkpoint"]
+    sanity_check_is_file = ["cmake/checkpointConfig.cmake"]
+    sanity_check_is_file = ["cmake/checkpointTargets.cmake"]
+    sanity_check_is_file = ["lib/libcheckpoint.a"]
 
     def cmake_args(self):
         args = ["-Ddetector_DIR={}".format(self.spec["darma-detector"].prefix)]
