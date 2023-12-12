@@ -210,8 +210,8 @@ class DarmaVt(CMakePackage):
             "-DUSE_STD_THREAD={}".format(
                 int(self.spec.variants["use_std_thread"].value)
             ),
-            "-DVT_BUILD_TESTS={}".format(int(self.spec.variants["build_tests"].value)),
-            "-DVT_BUILD_EXAMPLES={}".format(
+            "-Dvt_build_tests={}".format(int(self.spec.variants["build_tests"].value)),
+            "-Dvt_build_examples={}".format(
                 int(self.spec.variants["build_examples"].value)
             ),
         ]
