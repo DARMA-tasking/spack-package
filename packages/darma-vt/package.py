@@ -211,7 +211,7 @@ class DarmaVt(CMakePackage):
             ),
         ]
 
-        if self.spec.version == Version("develop"):
+        if self.spec.version > Version("1.3.0"):
             build_tests_arg = "-Dvt_build_tests={}".format(
                 int(self.spec.variants["build_tests"].value)
             )
