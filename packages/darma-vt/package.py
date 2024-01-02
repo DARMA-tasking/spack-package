@@ -157,8 +157,7 @@ class DarmaVt(CMakePackage):
     depends_on("darma-checkpoint")
 
     sanity_check_is_dir = ["include/vt"]
-    sanity_check_is_file = ["cmake/vtConfig.cmake"]
-    sanity_check_is_file = ["cmake/vtTargets.cmake"]
+    sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
 
     def cmake_args(self):
         args = [
@@ -210,10 +209,25 @@ class DarmaVt(CMakePackage):
             "-DUSE_STD_THREAD={}".format(
                 int(self.spec.variants["use_std_thread"].value)
             ),
-            "-DVT_BUILD_TESTS={}".format(int(self.spec.variants["build_tests"].value)),
-            "-DVT_BUILD_EXAMPLES={}".format(
-                int(self.spec.variants["build_examples"].value)
-            ),
         ]
+
+        if self.spec.version > Version("1.3.0"):
+            build_tests_arg = "-Dvt_build_tests={}".format(
+                int(self.spec.variants["build_tests"].value)
+            )
+            build_examples_arg = "-Dvt_build_examples={}".format(
+                int(self.spec.variants["build_examples"].value)
+            )
+        else:
+            build_tests_arg = "-DVT_BUILD_TESTS={}".format(
+                int(self.spec.variants["build_tests"].value)
+            )
+            build_examples_arg = "-DVT_BUILD_EXAMPLES={}".format(
+                int(self.spec.variants["build_examples"].value)
+            )
+
+        # Add the arguments to the args list
+        args.append(build_tests_arg)
+        args.append(build_examples_arg)
 
         return args
