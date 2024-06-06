@@ -156,6 +156,7 @@ class DarmaVt(CMakePackage):
     depends_on("mpi")
     depends_on("darma-magistrate+kokkos", when="+kokkos")
     depends_on("darma-magistrate~kokkos", when="~kokkos")
+    depends_on("fmt")
 
     sanity_check_is_dir = ["include/vt"]
     sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
@@ -209,6 +210,7 @@ class DarmaVt(CMakePackage):
             "-DUSE_STD_THREAD={}".format(
                 int(self.spec.variants["use_std_thread"].value)
             ),
+            "-Dvt_external_fmt=ON",
         ]
 
         if self.spec.version > Version("1.3.0"):
