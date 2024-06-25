@@ -210,8 +210,10 @@ class DarmaVt(CMakePackage):
             "-DUSE_STD_THREAD={}".format(
                 int(self.spec.variants["use_std_thread"].value)
             ),
-            "-Dvt_external_fmt=ON",
         ]
+
+        if self.spec.version >= Version("1.5.0"):
+            args.append("-Dvt_external_fmt=ON")
 
         if self.spec.version > Version("1.3.0"):
             build_tests_arg = "-Dvt_build_tests={}".format(
