@@ -154,7 +154,7 @@ class DarmaVt(CMakePackage):
 
     depends_on("mpi")
     depends_on("darma-magistrate")
-    depends_on("fmt")
+    depends_on("fmt", when="@develop,1.5:")
 
     sanity_check_is_dir = ["include/vt"]
     sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
