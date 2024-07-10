@@ -153,16 +153,14 @@ class DarmaVt(CMakePackage):
     variant("build_examples", default=False, description="Build all VT examples")
 
     depends_on("mpi")
-    depends_on("darma-detector")
-    depends_on("darma-checkpoint")
+    depends_on("darma-magistrate")
 
     sanity_check_is_dir = ["include/vt"]
     sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
 
     def cmake_args(self):
         args = [
-            "-Ddetector_DIR={}".format(self.spec["darma-detector"].prefix),
-            "-Dcheckpoint_DIR={}".format(self.spec["darma-checkpoint"].prefix),
+            "-Dmagistrate_ROOT={}".format(self.spec["darma-magistrate"].prefix),
             "-Dvt_lb_enabled={}".format(int(self.spec.variants["lb_enabled"].value)),
             "-Dvt_trace_enabled={}".format(
                 int(self.spec.variants["trace_enabled"].value)
