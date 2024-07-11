@@ -1,0 +1,34 @@
+name: Test spack package
+
+on: pull_request
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    container:
+      image: lifflander1/vt:amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp
+      env:
+        VT_LB_ENABLED: 0
+        VT_TRACE_ENABLED: 0
+        VT_BUILD_TRACE_ONLY: 1
+        VT_DOXYGEN_ENABLED: 0
+        VT_MIMALLOC_ENABLED: 0
+        VT_DOCS_ENABLED: 0
+        VT_ASAN_ENABLED: 0
+        VT_WERROR_ENABLED: 1
+        VT_POOL_ENABLED: 1
+        VT_ZOLTAN_ENABLED: 0
+        VT_MPI_GUARD_ENABLED: 0
+        VT_DIAGNOSTICS_ENABLED: 1
+        VT_DIAGNOSTICS_RUNTIME_ENABLED: 0
+        VT_UNITY_BUILD_ENABLED: 1
+        VT_FCONTEXT_ENABLED: 0
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run test script
+      run: |
+        chmod +x ci/test_spack.sh
+        ci/test_spack.sh ${{ github.head_ref }}
