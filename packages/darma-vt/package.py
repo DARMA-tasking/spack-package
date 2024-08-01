@@ -151,9 +151,11 @@ class DarmaVt(CMakePackage):
     )
     variant("build_tests", default=False, description="Build all VT tests")
     variant("build_examples", default=False, description="Build all VT examples")
+    variant("kokkos_enabled", default=False, description="Enable Kokkos support")
 
     depends_on("mpi")
-    depends_on("darma-magistrate")
+    depends_on("darma-magistrate+kokkos_enabled", when="+kokkos_enabled")
+    depends_on("darma-magistrate~kokkos_enabled", when="~kokkos_enabled")
 
     sanity_check_is_dir = ["include/vt"]
     sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
