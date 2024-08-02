@@ -9,7 +9,6 @@ git clone https://github.com/spack/spack.git
 git clone -b "$branch_name" https://github.com/DARMA-tasking/spack-package.git
 
 cd "$spack_path" || exit 1
-git checkout v0.16.3
 cd "$cur_path" || exit 1
 
 declare -A variables_map

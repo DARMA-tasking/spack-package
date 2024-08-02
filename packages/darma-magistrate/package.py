@@ -52,7 +52,7 @@ class DarmaMagistrate(CMakePackage):
         "lib/libmagistrate.a"
     ]
 
-    depends_on("kokkos@master", when="+kokkos_enabled")
+    depends_on("kokkos", when="+kokkos_enabled")
 
     def cmake_args(self):
         args = []
