@@ -1,0 +1,5 @@
+packages:
+  openmpi:
+    externals:
+    - spec: openmpi@4.0.4
+      prefix: /usr/local
