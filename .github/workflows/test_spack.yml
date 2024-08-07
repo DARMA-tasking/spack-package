@@ -28,7 +28,26 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Run test script
+    - name: Prepare Spack configuration
       run: |
+        mkdir -p /github/home/.spack/
+        cp ci/packages.yaml /github/home/.spack/
+
         chmod +x ci/test_spack.sh
-        ci/test_spack.sh ${{ github.head_ref }}
+
+        mkdir ./kokkos_enabled
+        mkdir ./kokkos_disabled
+
+    - name: Run test script (Kokkos enabled)
+      working-directory: ./kokkos_enabled
+      env:
+        VT_KOKKOS_ENABLED: 1
+      run: |
+        ../ci/test_spack.sh ${{ github.head_ref }}
+
+    - name: Run test script (Kokkos disabled)
+      working-directory: ./kokkos_disabled
+      env:
+        VT_KOKKOS_ENABLED: 0
+      run: |
+        ../ci/test_spack.sh ${{ github.head_ref }}

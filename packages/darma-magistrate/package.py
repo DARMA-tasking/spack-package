@@ -43,8 +43,21 @@ class DarmaMagistrate(CMakePackage):
     git = "https://github.com/DARMA-tasking/magistrate.git"
 
     version("develop", branch="develop")
+    variant("kokkos", default=False, description="Enable Kokkos support")
 
     sanity_check_is_dir = ["include/checkpoint"]
-    sanity_check_is_file = ["cmake/magistrateConfig.cmake"]
-    sanity_check_is_file = ["cmake/magistrateTargets.cmake"]
-    sanity_check_is_file = ["lib/libmagistrate.a"]
+    sanity_check_is_file = [
+        "cmake/magistrateConfig.cmake",
+        "cmake/magistrateTargets.cmake",
+        "lib/libmagistrate.a"
+    ]
+
+    depends_on("kokkos", when="+kokkos")
+
+    def cmake_args(self):
+        args = []
+
+        if "+kokkos" in self.spec:
+            args.append("-DKokkos_ROOT={}".format(self.spec['kokkos'].prefix))
+
+        return args

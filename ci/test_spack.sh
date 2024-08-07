@@ -9,7 +9,6 @@ git clone https://github.com/spack/spack.git
 git clone -b "$branch_name" https://github.com/DARMA-tasking/spack-package.git
 
 cd "$spack_path" || exit 1
-git checkout v0.16.3
 cd "$cur_path" || exit 1
 
 declare -A variables_map
@@ -27,6 +26,7 @@ variables_map["diagnostics_enabled"]="${VT_DIAGNOSTICS_ENABLED:-0}"
 variables_map["diagnostics_runtime_enabled"]="${VT_DIAGNOSTICS_RUNTIME_ENABLED:-0}"
 variables_map["unity_build_enabled"]="${VT_UNITY_BUILD_ENABLED:-0}"
 variables_map["fcontext_enabled"]="${VT_FCONTEXT_ENABLED:-0}"
+variables_map["kokkos"]="${VT_KOKKOS_ENABLED:-0}"
 
 cmd_vars=()
 for flag in "${!variables_map[@]}"
@@ -43,6 +43,7 @@ done
 install_cmd=$(printf " %s" "${cmd_vars[@]}")
 install_cmd="$spack_path/bin/spack install darma-vt@develop build_type=Release ${install_cmd:1}"
 
+"$spack_path"/bin/spack clean --all
 "$spack_path"/bin/spack repo add "$vt_spack_package"
 "$spack_path"/bin/spack external find
 $install_cmd
