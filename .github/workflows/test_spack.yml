@@ -30,7 +30,7 @@ jobs:
 
     - name: Prepare Spack configuration
       run: |
-        apt update && apt install unzip
+        apt update -y -q && apt install -y -q unzip
         mkdir -p /github/home/.spack/
         cp ci/packages.yaml /github/home/.spack/
         chmod +x ci/test_spack.sh
