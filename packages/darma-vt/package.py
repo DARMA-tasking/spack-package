@@ -1,4 +1,4 @@
-#                           DARMA Toolkit v. 1.0.0
+#                           DARMA Toolkit v. 1.5.0
 #                        DARMA/vt => Virtual Transport
 #
 # Copyright 2019 National Technology & Engineering Solutions of Sandia, LLC
@@ -33,7 +33,8 @@
 #
 # Questions? Contact darma@sandia.gov
 
-from spack import *
+import spack.build_systems.cmake
+from spack.package import *
 
 
 class DarmaVt(CMakePackage):
@@ -56,6 +57,7 @@ class DarmaVt(CMakePackage):
     git = "https://github.com/DARMA-tasking/vt.git"
 
     version("1.0.0", tag="1.0.0")
+    version("1.5.0", tag="1.5.0")
     version("develop", branch="develop")
 
     variant(
@@ -156,6 +158,7 @@ class DarmaVt(CMakePackage):
     depends_on("mpi")
     depends_on("darma-magistrate+kokkos", when="+kokkos")
     depends_on("darma-magistrate~kokkos", when="~kokkos")
+    depends_on("fmt@7.1.3", when="@develop,1.5:")
 
     sanity_check_is_dir = ["include/vt"]
     sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
@@ -210,6 +213,9 @@ class DarmaVt(CMakePackage):
                 int(self.spec.variants["use_std_thread"].value)
             ),
         ]
+
+        if self.spec.version >= Version("1.5.0"):
+            args.append("-Dvt_external_fmt=ON")
 
         if self.spec.version > Version("1.3.0"):
             build_tests_arg = "-Dvt_build_tests={}".format(
