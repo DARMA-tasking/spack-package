@@ -56,6 +56,7 @@ class DarmaVt(CMakePackage):
     homepage = "https://github.com/DARMA-tasking/vt"
     git = "https://github.com/DARMA-tasking/vt.git"
 
+    version("1.0.0", tag="1.0.0")
     version("1.5.0", tag="1.5.0")
     version("develop", branch="develop")
 
