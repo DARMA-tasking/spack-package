@@ -151,8 +151,6 @@ class DarmaVt(CMakePackage):
         default=False,
         description="Force use of std::thread for threading",
     )
-    variant("build_tests", default=False, description="Build all VT tests")
-    variant("build_examples", default=False, description="Build all VT examples")
     variant("kokkos", default=False, description="Enable Kokkos support")
 
     depends_on("mpi")
@@ -218,22 +216,14 @@ class DarmaVt(CMakePackage):
             args.append("-Dvt_external_fmt=ON")
 
         if self.spec.version > Version("1.3.0"):
-            build_tests_arg = "-Dvt_build_tests={}".format(
-                int(self.spec.variants["build_tests"].value)
-            )
-            build_examples_arg = "-Dvt_build_examples={}".format(
-                int(self.spec.variants["build_examples"].value)
-            )
+            args.extend([
+                self.define("vt_build_tests", self.run_tests),
+                self.define("vt_build_examples", self.run_tests)
+            ]);
         else:
-            build_tests_arg = "-DVT_BUILD_TESTS={}".format(
-                int(self.spec.variants["build_tests"].value)
-            )
-            build_examples_arg = "-DVT_BUILD_EXAMPLES={}".format(
-                int(self.spec.variants["build_examples"].value)
-            )
-
-        # Add the arguments to the args list
-        args.append(build_tests_arg)
-        args.append(build_examples_arg)
+            args.extend([
+                self.define("VT_BUILD_TESTS", self.run_tests),
+                self.define("VT_BUILD_EXAMPLES", self.run_tests)
+            ]);
 
         return args
