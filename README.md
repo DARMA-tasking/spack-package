@@ -14,26 +14,21 @@ spack repo add /path/to/spack-package/
 
 It's important that spack uses the right version of mpi or it may try to build mpi from source. Similarly, it may be useful for it to be configured to use the system's cmake.
 
-Edit `~/.spack/packages.yaml`. For example:
+If the system uses modules, be sure the relevant modules are loaded. Then run the following commands (substituting openmpi for mpich, etc. as appropriate):
 
-```yaml
-packages:
-  openmpi:
-    paths:
-      openmpi@3.1.3%gcc@8.2.0: /path/to/system/openmpi
-  cmake:
-    paths:
-    cmake@3.13.2: /path/to/system/cmake
+```sh
+#Have spack locate the system's CMake and OpenMPI
+spack external find --not-buildable cmake openmpi
 
+#Configure spack to never try to build any type of MPI package for itself
+spack config add packages:mpi:buildable:false
 ```
 
 This avoids spack trying to build openmpi and cmake from source. To check what a particular install command will install, use:
 
 ```sh
-spack install --fake <package_name>
+spack spec <package_name>
 ```
-
-However, you will have to uninstall the packages afterwards.
 
 ## Usage
 
@@ -44,3 +39,11 @@ spack install darma-vt
 ```
 
 By default it will install version 1.0. You can specify `darma-vt@develop` to install the latest development version.
+
+To run the tests for darma-vt, run:
+
+```sh
+spack install --test=root darma-vt
+```
+
+If darma-vt is already installed, you will have to uninstall it prior to running the above command.
