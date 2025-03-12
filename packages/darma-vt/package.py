@@ -227,3 +227,7 @@ class DarmaVt(CMakePackage):
             ]);
 
         return args
+
+    def check(self):
+        with working_dir(self.build_directory):
+            ctest("--output-on-failure", "--label-regex", "unit_test|example")
