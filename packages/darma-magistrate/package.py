@@ -54,11 +54,15 @@ class DarmaMagistrate(CMakePackage):
     ]
 
     depends_on("kokkos", when="+kokkos")
+    depends_on("googletest", type=("test"))
 
     def cmake_args(self):
-        args = []
+        args = [
+            self.define("magistrate_tests_enabled", self.run_tests),
+            self.define("magistrate_examples_enabled", self.run_tests)
+        ]
 
         if "+kokkos" in self.spec:
-            args.append("-DKokkos_ROOT={}".format(self.spec['kokkos'].prefix))
+            args.append(self.define("Kokkos_ROOT", self.spec['kokkos'].prefix))
 
         return args
