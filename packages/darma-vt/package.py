@@ -156,7 +156,7 @@ class DarmaVt(CMakePackage):
     depends_on("mpi")
     depends_on("darma-magistrate+kokkos", when="+kokkos")
     depends_on("darma-magistrate~kokkos", when="~kokkos")
-    depends_on("fmt@7.1.3", when="@develop,1.5:")
+    depends_on("fmt@11.1.3", when="@develop,1.5:")
 
     sanity_check_is_dir = ["include/vt"]
     sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
