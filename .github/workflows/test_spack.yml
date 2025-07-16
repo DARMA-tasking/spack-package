@@ -6,7 +6,7 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     container:
-      image: lifflander1/vt:amd64-ubuntu-20.04-gcc-10-gcc-10-openmpi-cpp
+      image: lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
       env:
         VT_LB_ENABLED: 0
         VT_TRACE_ENABLED: 0
