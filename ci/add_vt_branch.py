@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+
+"""
+Modifies the `darma-vt` package's `package.py` file to include a version entry for a given 'vt' branch.
+
+This is crucial for enabling Spack integration during 'vt' pull request validation.
+By appending declared 'vt' versions with the specified branch name, you can install the package using `spack install darma-vt@<GIT_BRANCH>`,
+which facilitates early detection of issues before changes are merged into the 'develop' branch.
+
+Usage:
+    python add_vt_branch.py <branch_name>
+
+Args:
+    branch_name (str): The name of the branch to be added to the `package.py` file.
+"""
+
 import sys
 import re
 from pathlib import Path
