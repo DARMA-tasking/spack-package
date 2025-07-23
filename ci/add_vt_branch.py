@@ -3,8 +3,8 @@ import sys
 import re
 from pathlib import Path
 
-if len(sys.argv) < 2:
-    sys.exit("usage: add_branch_version.py <branch_name>")
+if len(sys.argv) < 2 or sys.argv[1].strip() == "":
+    sys.exit("add_vt_branch.py: Branch name not provided or empty - skipping! (usage: add_vt_branch.py <branch_name>)")
 
 branch = sys.argv[1]
 
