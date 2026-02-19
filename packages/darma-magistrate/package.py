@@ -1,5 +1,5 @@
-#                           DARMA Toolkit v. 1.0.0
-#                        DARMA/vt => Virtual Transport
+#                           DARMA Toolkit v. 1.6.0
+#             DARMA/magistrate => Serialization and Checkpointing
 #
 # Copyright 2019 National Technology & Engineering Solutions of Sandia, LLC
 # (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S.
@@ -33,7 +33,9 @@
 #
 # Questions? Contact darma@sandia.gov
 
-import spack.build_systems.cmake
+
+from spack_repo.builtin.build_systems.cmake import CMakePackage
+
 from spack.package import *
 
 
@@ -44,6 +46,8 @@ class DarmaMagistrate(CMakePackage):
     git = "https://github.com/DARMA-tasking/magistrate.git"
 
     version("develop", branch="develop")
+    version("1.6.0", tag="1.6.0")
+
     variant("kokkos", default=False, description="Enable Kokkos support")
 
     sanity_check_is_dir = ["include/checkpoint"]

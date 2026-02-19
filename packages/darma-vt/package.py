@@ -33,7 +33,9 @@
 #
 # Questions? Contact darma@sandia.gov
 
-import spack.build_systems.cmake
+
+from spack_repo.builtin.build_systems.cmake import CMakePackage
+
 from spack.package import *
 
 
@@ -56,9 +58,12 @@ class DarmaVt(CMakePackage):
     homepage = "https://github.com/DARMA-tasking/vt"
     git = "https://github.com/DARMA-tasking/vt.git"
 
-    version("1.0.0", tag="1.0.0")
-    version("1.5.0", tag="1.5.0")
     version("develop", branch="develop")
+    version("1.6.0", tag="1.6.0")
+    version("1.5.0", tag="1.5.0")
+    version("1.4.0", tag="1.4.0")
+    version("1.3.0", tag="1.3.0")
+    version("1.2.2", tag="1.2.2")
 
     variant(
         "lb_enabled",
@@ -128,7 +133,7 @@ class DarmaVt(CMakePackage):
     variant(
         "priority_bits_per_level",
         values=int,
-        default=3,
+        default="3",
         description="Number of bits per level of priority in envelope",
     )
     variant(
@@ -154,8 +159,14 @@ class DarmaVt(CMakePackage):
     variant("kokkos", default=False, description="Enable Kokkos support")
 
     depends_on("mpi")
+
+    depends_on("darma-magistrate@1.6.0", when="@1.6.0")
+    depends_on("darma-magistrate@develop", when="@:1.5")
+    depends_on("darma-magistrate@develop", when="@develop")
+
     depends_on("darma-magistrate+kokkos", when="+kokkos")
     depends_on("darma-magistrate~kokkos", when="~kokkos")
+
     depends_on("fmt", when="@develop,1.5:")
 
     sanity_check_is_dir = ["include/vt"]
