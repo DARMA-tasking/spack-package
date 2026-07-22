@@ -45,6 +45,8 @@ class DarmaMagistrate(CMakePackage):
     homepage = "https://github.com/DARMA-tasking/magistrate"
     git = "https://github.com/DARMA-tasking/magistrate.git"
 
+    license("BSD-3-Clause")
+
     version("develop", branch="develop")
     version("1.6.0", tag="1.6.0")
 
