@@ -46,6 +46,7 @@ class DarmaMagistrate(CMakePackage):
     license("BSD-3-Clause")
 
     version("develop", branch="develop")
+    version("1.7.0", tag="1.7.0")
     version("1.6.0", tag="1.6.0")
 
     variant("kokkos", default=False, description="Enable Kokkos support")

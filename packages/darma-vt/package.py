@@ -112,19 +112,15 @@ class DarmaVt(CMakePackage):
 
     depends_on("mpi")
 
+    depends_on("darma-magistrate@1.7.0", when="@1.7.0")
     depends_on("darma-magistrate@1.6.0", when="@1.6.0")
     depends_on("darma-magistrate@develop", when="@:1.5")
-    depends_on("darma-magistrate@develop+kokkos", when="@develop")
+    depends_on("darma-magistrate@develop", when="@develop")
 
-    # depends_on("fmt@11.1.3", when="@develop,1.5:")
+    depends_on("darma-magistrate+kokkos", when="+kokkos")
+    depends_on("darma-magistrate~kokkos", when="~kokkos")
 
-    # VT 1.6.0 uses non-constexpr format strings which is invalid under C++20
-    # (triggered when Kokkos propagates cxx_std_20 transitively). Fix:
-    # - elm_id.h: make fmt_str constexpr
-    # - debug_print.h: wrap runtime format string with fmt::runtime()
-    # patch("vt_fmt_11_2.patch", when="@1.6.0")
-
-    depends_on("fmt@11.2.0")
+    depends_on("fmt@11.2.0", when="@develop,1.5:")
 
     depends_on("c", type="build")
     depends_on("cxx", type="build")
