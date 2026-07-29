@@ -35,9 +35,7 @@
 
 
 from spack_repo.builtin.build_systems.cmake import CMakePackage
-
 from spack.package import *
-
 
 class DarmaMagistrate(CMakePackage):
     """Serialization and checkpointing library"""
@@ -61,11 +59,13 @@ class DarmaMagistrate(CMakePackage):
 
     depends_on("kokkos", when="+kokkos")
     depends_on("googletest", type=("test"))
+    depends_on("c", type="build")
+    depends_on("cxx", type="build")
 
     def cmake_args(self):
         args = [
             self.define("magistrate_tests_enabled", self.run_tests),
-            self.define("magistrate_examples_enabled", self.run_tests)
+            self.define("magistrate_examples_enabled", self.run_tests),
         ]
 
         if "+kokkos" in self.spec:

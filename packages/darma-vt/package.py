@@ -1,4 +1,4 @@
-#                           DARMA Toolkit v. 1.6.0
+#                           DARMA Toolkit v. 1.7.0
 #                        DARMA/vt => Virtual Transport
 #
 # Copyright 2019 National Technology & Engineering Solutions of Sandia, LLC
@@ -61,6 +61,7 @@ class DarmaVt(CMakePackage):
     license("BSD-3-Clause")
 
     version("develop", branch="develop")
+    version("1.7.0", tag="1.7.0")
     version("1.6.0", tag="1.6.0")
     version("1.5.0", tag="1.5.0")
     version("1.4.0", tag="1.4.0")
@@ -113,12 +114,20 @@ class DarmaVt(CMakePackage):
 
     depends_on("darma-magistrate@1.6.0", when="@1.6.0")
     depends_on("darma-magistrate@develop", when="@:1.5")
-    depends_on("darma-magistrate@develop", when="@develop")
+    depends_on("darma-magistrate@develop+kokkos", when="@develop")
 
-    depends_on("darma-magistrate+kokkos", when="+kokkos")
-    depends_on("darma-magistrate~kokkos", when="~kokkos")
+    # depends_on("fmt@11.1.3", when="@develop,1.5:")
 
-    depends_on("fmt", when="@develop,1.5:")
+    # VT 1.6.0 uses non-constexpr format strings which is invalid under C++20
+    # (triggered when Kokkos propagates cxx_std_20 transitively). Fix:
+    # - elm_id.h: make fmt_str constexpr
+    # - debug_print.h: wrap runtime format string with fmt::runtime()
+    # patch("vt_fmt_11_2.patch", when="@1.6.0")
+
+    depends_on("fmt@11.2.0")
+
+    depends_on("c", type="build")
+    depends_on("cxx", type="build")
 
     sanity_check_is_dir = ["include/vt"]
     sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
@@ -148,6 +157,7 @@ class DarmaVt(CMakePackage):
 
         if self.spec.version >= Version("1.5.0"):
             args.append("-Dvt_external_fmt=ON")
+            args.append("-Dfmt_ROOT={}".format(self.spec["fmt"].prefix))
 
         if self.spec.version > Version("1.3.0"):
             args.extend([
