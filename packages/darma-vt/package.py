@@ -120,7 +120,7 @@ class DarmaVt(CMakePackage):
     depends_on("darma-magistrate+kokkos", when="+kokkos")
     depends_on("darma-magistrate~kokkos", when="~kokkos")
 
-    depends_on("fmt@11.2.0", when="@develop,1.5:")
+    depends_on("fmt@10.2.1:11", when="@develop,1.5:")
 
     depends_on("c", type="build")
     depends_on("cxx", type="build")

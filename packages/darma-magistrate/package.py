@@ -1,4 +1,4 @@
-#                           DARMA Toolkit v. 1.6.0
+#                           DARMA Toolkit v. 1.7.0
 #             DARMA/magistrate => Serialization and Checkpointing
 #
 # Copyright 2019 National Technology & Engineering Solutions of Sandia, LLC
