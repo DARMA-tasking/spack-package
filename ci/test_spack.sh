@@ -5,7 +5,7 @@ set -euo pipefail
 cur_path=$(pwd)
 vt_spack_package="$cur_path/spack-package"
 
-git clone --depth=2 --branch v1.2.2 https://github.com/spack/spack.git
+git clone --depth=2 https://github.com/spack/spack.git
 . spack/share/spack/setup-env.sh
 
 branch_name=${1:-master}
@@ -38,8 +38,10 @@ install_cmd=$(printf " %s" "${cmd_vars[@]}")
 install_cmd="spack install darma-vt@develop build_type=Release ${install_cmd:1}"
 
 spack clean --all
-spack repo remove vt 2>/dev/null || true
-spack repo add "$vt_spack_package"
+
+if ! spack repo list | grep -qF "$vt_spack_package"; then
+  spack repo add "$vt_spack_package"
+fi
 spack external find
 $install_cmd
 
