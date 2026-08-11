@@ -45,3 +45,54 @@ jobs:
         VT_KOKKOS_ENABLED: 0
       run: |
         ../ci/test_spack.sh ${{ github.head_ref }}
+
+  test-fmt-versions:
+    runs-on: ubuntu-latest
+    container:
+      image: lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check fmt version constraints across build tags
+      run: |
+        chmod +x ci/test_fmt_versions.sh
+        ./ci/test_fmt_versions.sh ${{ github.head_ref }}
+
+  build-fmt-versions:
+    runs-on: ubuntu-latest
+    container:
+      image: lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - vt_version: "1.5.0"
+            fmt_version: "10.2.1"
+          - vt_version: "1.6.0"
+            fmt_version: "10.2.1"
+          - vt_version: "1.6.0"
+            fmt_version: "11.2.0"
+          - vt_version: "1.7.0"
+            fmt_version: "10.2.1"
+          - vt_version: "1.7.0"
+            fmt_version: "11.2.0"
+          - vt_version: "develop"
+            fmt_version: "12.2.0"
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Prepare Spack configuration
+      run: |
+        apt update -y -q && apt install -y -q libssl-dev unzip
+        mkdir -p /github/home/.spack/
+        cp ci/packages.yaml /github/home/.spack/
+        chmod +x ci/build_fmt_version.sh
+
+    - name: Build darma-vt@${{ matrix.vt_version }} against fmt@${{ matrix.fmt_version }}
+      run: |
+        ./ci/build_fmt_version.sh ${{ github.head_ref }} ${{ matrix.vt_version }} ${{ matrix.fmt_version }}

@@ -38,6 +38,7 @@ install_cmd=$(printf " %s" "${cmd_vars[@]}")
 install_cmd="spack install darma-vt@develop build_type=Release ${install_cmd:1}"
 
 spack clean --all
+spack repo remove vt 2>/dev/null || true
 spack repo add "$vt_spack_package"
 spack external find
 $install_cmd
