@@ -2,8 +2,13 @@ name: Test spack package
 
 on: pull_request
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run-script:
+    name: run-script (Kokkos ${{ matrix.kokkos_enabled == 1 && 'enabled' || 'disabled' }})
     runs-on: ubuntu-latest
     container:
       image: lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
@@ -17,6 +22,12 @@ jobs:
         VT_WERROR_ENABLED: 1
         VT_POOL_ENABLED: 1
         VT_MPI_GUARD_ENABLED: 0
+        VT_KOKKOS_ENABLED: ${{ matrix.kokkos_enabled }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        kokkos_enabled: [0, 1]
 
     steps:
     - name: Checkout code
@@ -29,22 +40,9 @@ jobs:
         cp ci/packages.yaml /github/home/.spack/
         chmod +x ci/test_spack.sh
 
-        mkdir ./kokkos_enabled
-        mkdir ./kokkos_disabled
-
-    - name: Run test script (Kokkos enabled)
-      working-directory: ./kokkos_enabled
-      env:
-        VT_KOKKOS_ENABLED: 1
+    - name: Run test script (Kokkos ${{ matrix.kokkos_enabled == 1 && 'enabled' || 'disabled' }})
       run: |
-        ../ci/test_spack.sh ${{ github.head_ref }}
-
-    - name: Run test script (Kokkos disabled)
-      working-directory: ./kokkos_disabled
-      env:
-        VT_KOKKOS_ENABLED: 0
-      run: |
-        ../ci/test_spack.sh ${{ github.head_ref }}
+        ./ci/test_spack.sh ${{ github.head_ref }}
 
   test-fmt-versions:
     runs-on: ubuntu-latest
