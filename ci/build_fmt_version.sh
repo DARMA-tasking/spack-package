@@ -9,7 +9,7 @@ set -euo pipefail
 cur_path=$(pwd)
 vt_spack_package="$cur_path/spack-package"
 
-git clone --depth=2 https://github.com/spack/spack.git
+git clone --depth=2 --branch v1.2.2 https://github.com/spack/spack.git
 . spack/share/spack/setup-env.sh
 
 branch_name=${1:-master}
