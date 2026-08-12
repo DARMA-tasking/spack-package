@@ -1,5 +1,5 @@
-#                           DARMA Toolkit v. 1.0.0
-#                        DARMA/vt => Virtual Transport
+#                           DARMA Toolkit v. 1.7.0
+#             DARMA/magistrate => Serialization and Checkpointing
 #
 # Copyright 2019 National Technology & Engineering Solutions of Sandia, LLC
 # (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S.
@@ -33,9 +33,9 @@
 #
 # Questions? Contact darma@sandia.gov
 
-import spack.build_systems.cmake
-from spack.package import *
 
+from spack_repo.builtin.build_systems.cmake import CMakePackage
+from spack.package import *
 
 class DarmaMagistrate(CMakePackage):
     """Serialization and checkpointing library"""
@@ -43,7 +43,12 @@ class DarmaMagistrate(CMakePackage):
     homepage = "https://github.com/DARMA-tasking/magistrate"
     git = "https://github.com/DARMA-tasking/magistrate.git"
 
+    license("BSD-3-Clause")
+
     version("develop", branch="develop")
+    version("1.7.0", tag="1.7.0")
+    version("1.6.0", tag="1.6.0")
+
     variant("kokkos", default=False, description="Enable Kokkos support")
 
     sanity_check_is_dir = ["include/checkpoint"]
@@ -55,11 +60,13 @@ class DarmaMagistrate(CMakePackage):
 
     depends_on("kokkos", when="+kokkos")
     depends_on("googletest", type=("test"))
+    depends_on("c", type="build")
+    depends_on("cxx", type="build")
 
     def cmake_args(self):
         args = [
             self.define("magistrate_tests_enabled", self.run_tests),
-            self.define("magistrate_examples_enabled", self.run_tests)
+            self.define("magistrate_examples_enabled", self.run_tests),
         ]
 
         if "+kokkos" in self.spec:

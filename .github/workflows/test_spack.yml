@@ -2,8 +2,13 @@ name: Test spack package
 
 on: pull_request
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run-script:
+    name: run-script (Kokkos ${{ matrix.kokkos_enabled == 1 && 'enabled' || 'disabled' }})
     runs-on: ubuntu-latest
     container:
       image: lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
@@ -11,18 +16,18 @@ jobs:
         VT_LB_ENABLED: 0
         VT_TRACE_ENABLED: 0
         VT_BUILD_TRACE_ONLY: 1
-        VT_DOXYGEN_ENABLED: 0
         VT_MIMALLOC_ENABLED: 0
         VT_DOCS_ENABLED: 0
         VT_ASAN_ENABLED: 0
         VT_WERROR_ENABLED: 1
         VT_POOL_ENABLED: 1
-        VT_ZOLTAN_ENABLED: 0
         VT_MPI_GUARD_ENABLED: 0
-        VT_DIAGNOSTICS_ENABLED: 1
-        VT_DIAGNOSTICS_RUNTIME_ENABLED: 0
-        VT_UNITY_BUILD_ENABLED: 1
-        VT_FCONTEXT_ENABLED: 0
+        VT_KOKKOS_ENABLED: ${{ matrix.kokkos_enabled }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        kokkos_enabled: [0, 1]
 
     steps:
     - name: Checkout code
@@ -35,19 +40,57 @@ jobs:
         cp ci/packages.yaml /github/home/.spack/
         chmod +x ci/test_spack.sh
 
-        mkdir ./kokkos_enabled
-        mkdir ./kokkos_disabled
-
-    - name: Run test script (Kokkos enabled)
-      working-directory: ./kokkos_enabled
-      env:
-        VT_KOKKOS_ENABLED: 1
+    - name: Run test script (Kokkos ${{ matrix.kokkos_enabled == 1 && 'enabled' || 'disabled' }})
       run: |
-        ../ci/test_spack.sh ${{ github.head_ref }}
+        ./ci/test_spack.sh ${{ github.head_ref }}
 
-    - name: Run test script (Kokkos disabled)
-      working-directory: ./kokkos_disabled
-      env:
-        VT_KOKKOS_ENABLED: 0
+  test-fmt-versions:
+    runs-on: ubuntu-latest
+    container:
+      image: lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check fmt version constraints across build tags
       run: |
-        ../ci/test_spack.sh ${{ github.head_ref }}
+        chmod +x ci/test_fmt_versions.sh
+        ./ci/test_fmt_versions.sh ${{ github.head_ref }}
+
+  build-fmt-versions:
+    runs-on: ubuntu-latest
+    container:
+      image: lifflander1/vt:wf-amd64-ubuntu-20.04-gcc-10-openmpi-cpp
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - vt_version: "1.5.0"
+            fmt_version: "10.2.1"
+          - vt_version: "1.6.0"
+            fmt_version: "10.2.1"
+          - vt_version: "1.6.0"
+            fmt_version: "11.2.0"
+          - vt_version: "1.7.0"
+            fmt_version: "10.2.1"
+          - vt_version: "1.7.0"
+            fmt_version: "11.2.0"
+          - vt_version: "develop"
+            fmt_version: "12.2.0"
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Prepare Spack configuration
+      run: |
+        apt update -y -q && apt install -y -q libssl-dev unzip
+        mkdir -p /github/home/.spack/
+        cp ci/packages.yaml /github/home/.spack/
+        chmod +x ci/build_fmt_version.sh
+
+    - name: Build darma-vt@${{ matrix.vt_version }} against fmt@${{ matrix.fmt_version }}
+      run: |
+        ./ci/build_fmt_version.sh ${{ github.head_ref }} ${{ matrix.vt_version }} ${{ matrix.fmt_version }}

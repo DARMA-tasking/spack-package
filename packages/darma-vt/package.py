@@ -1,4 +1,4 @@
-#                           DARMA Toolkit v. 1.5.0
+#                           DARMA Toolkit v. 1.7.0
 #                        DARMA/vt => Virtual Transport
 #
 # Copyright 2019 National Technology & Engineering Solutions of Sandia, LLC
@@ -33,7 +33,9 @@
 #
 # Questions? Contact darma@sandia.gov
 
-import spack.build_systems.cmake
+
+from spack_repo.builtin.build_systems.cmake import CMakePackage
+
 from spack.package import *
 
 
@@ -56,9 +58,15 @@ class DarmaVt(CMakePackage):
     homepage = "https://github.com/DARMA-tasking/vt"
     git = "https://github.com/DARMA-tasking/vt.git"
 
-    version("1.0.0", tag="1.0.0")
-    version("1.5.0", tag="1.5.0")
+    license("BSD-3-Clause")
+
     version("develop", branch="develop")
+    version("1.7.0", tag="1.7.0")
+    version("1.6.0", tag="1.6.0")
+    version("1.5.0", tag="1.5.0")
+    version("1.4.0", tag="1.4.0")
+    version("1.3.0", tag="1.3.0")
+    version("1.2.2", tag="1.2.2")
 
     variant(
         "lb_enabled",
@@ -74,11 +82,6 @@ class DarmaVt(CMakePackage):
         "trace_only",
         default=False,
         description="Compile vt in trace-only mode",
-    )
-    variant(
-        "doxygen_enabled",
-        default=False,
-        description="Enable doxygen generation",
     )
     variant(
         "mimalloc_enabled",
@@ -101,62 +104,28 @@ class DarmaVt(CMakePackage):
         description="Use memory pool in vt for message allocation",
     )
     variant(
-        "zoltan_enabled",
-        default=False,
-        description="Build with Zoltan enabled for ZoltanLB support",
-    )
-    variant(
         "mpi_guards",
         default=False,
         description="Guards against mis-use of MPI calls in code using vt",
     )
-    variant(
-        "priorities_enabled",
-        default=True,
-        description="Enable prioritization of work",
-    )
-    variant(
-        "diagnostics_enabled",
-        default=True,
-        description="Enable VT component diagnostics for performance analysis",
-    )
-    variant(
-        "diagnostics_runtime_enabled",
-        default=False,
-        description="Enable VT component diagnostics at runtime by default",
-    )
-    variant(
-        "priority_bits_per_level",
-        values=int,
-        default=3,
-        description="Number of bits per level of priority in envelope",
-    )
-    variant(
-        "unity_build_enabled",
-        default=False,
-        description="Build with Unity/Jumbo mode enabled (requires CMake >= 3.16)",
-    )
-    variant(
-        "fcontext_enabled",
-        default=False,
-        description="Force use of fcontext for threading",
-    )
-    variant(
-        "use_openmp",
-        default=False,
-        description="Force use of OpenMP for threading",
-    )
-    variant(
-        "use_std_thread",
-        default=False,
-        description="Force use of std::thread for threading",
-    )
     variant("kokkos", default=False, description="Enable Kokkos support")
 
     depends_on("mpi")
+
+    depends_on("darma-magistrate@1.7.0", when="@1.7.0")
+    depends_on("darma-magistrate@1.6.0", when="@1.6.0")
+    depends_on("darma-magistrate@develop", when="@:1.5")
+    depends_on("darma-magistrate@develop", when="@develop")
+
     depends_on("darma-magistrate+kokkos", when="+kokkos")
     depends_on("darma-magistrate~kokkos", when="~kokkos")
-    depends_on("fmt", when="@develop,1.5:")
+
+    depends_on("fmt@10.2.1:10", when="@1.5.0")
+    depends_on("fmt@10.2.1:11", when="@1.6:1.7")
+    depends_on("fmt@12", when="@develop")
+
+    depends_on("c", type="build")
+    depends_on("cxx", type="build")
 
     sanity_check_is_dir = ["include/vt"]
     sanity_check_is_file = ["cmake/vtConfig.cmake", "cmake/vtTargets.cmake"]
@@ -169,9 +138,6 @@ class DarmaVt(CMakePackage):
                 int(self.spec.variants["trace_enabled"].value)
             ),
             "-Dvt_trace_only={}".format(int(self.spec.variants["trace_only"].value)),
-            "-Dvt_doxygen_enabled={}".format(
-                int(self.spec.variants["doxygen_enabled"].value)
-            ),
             "-Dvt_mimalloc_enabled={}".format(
                 int(self.spec.variants["mimalloc_enabled"].value)
             ),
@@ -184,36 +150,12 @@ class DarmaVt(CMakePackage):
             "-Dvt_pool_enabled={}".format(
                 int(self.spec.variants["pool_enabled"].value)
             ),
-            "-Dvt_zoltan_enabled={}".format(
-                int(self.spec.variants["zoltan_enabled"].value)
-            ),
             "-Dvt_mpi_guards={}".format(int(self.spec.variants["mpi_guards"].value)),
-            "-Dvt_priorities_enabled={}".format(
-                int(self.spec.variants["priorities_enabled"].value)
-            ),
-            "-Dvt_diagnostics_enabled={}".format(
-                int(self.spec.variants["diagnostics_enabled"].value)
-            ),
-            "-Dvt_diagnostics_runtime_enabled={}".format(
-                int(self.spec.variants["diagnostics_runtime_enabled"].value)
-            ),
-            "-Dvt_priority_bits_per_level={}".format(
-                int(self.spec.variants["priority_bits_per_level"].value)
-            ),
-            "-Dvt_unity_build_enabled={}".format(
-                int(self.spec.variants["unity_build_enabled"].value)
-            ),
-            "-Dvt_fcontext_enabled={}".format(
-                int(self.spec.variants["fcontext_enabled"].value)
-            ),
-            "-DUSE_OPENMP={}".format(int(self.spec.variants["use_openmp"].value)),
-            "-DUSE_STD_THREAD={}".format(
-                int(self.spec.variants["use_std_thread"].value)
-            ),
         ]
 
         if self.spec.version >= Version("1.5.0"):
             args.append("-Dvt_external_fmt=ON")
+            args.append("-Dfmt_ROOT={}".format(self.spec["fmt"].prefix))
 
         if self.spec.version > Version("1.3.0"):
             args.extend([
