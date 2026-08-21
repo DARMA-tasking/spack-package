@@ -34,7 +34,7 @@
 # Questions? Contact darma@sandia.gov
 
 
-from spack_repo.builtin.build_systems.cmake import CMakePackage
+import spack.build_systems.cmake
 from spack.package import *
 
 class DarmaMagistrate(CMakePackage):
