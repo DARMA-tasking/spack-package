@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Modifies the `darma-vt` package's `package.py` file to include a version entry for a given 'vt' branch.
+Modifies the `darma-vt` package's `package.py` file to include a version entry
+for a given 'vt' branch and the dependencies required by the develop version.
 
 This is crucial for enabling Spack integration during 'vt' pull request validation.
 By appending declared 'vt' versions with the specified branch name, you can install the package using `spack install darma-vt@<GIT_BRANCH>`,
@@ -31,7 +32,31 @@ version_pattern = re.compile(r"^\s*version\(")
 last_version_idx = max(i for i, line in enumerate(text) if version_pattern.match(line))
 indent = re.match(r"^(\s*)", text[last_version_idx]).group(1)
 new_entry = f'{indent}version("{branch}", branch="{branch}")'
+changed = False
 
 if all(line.strip() != new_entry.strip() for line in text):
     text.insert(last_version_idx + 1, new_entry)
+    changed = True
+
+develop_dependency_pattern = re.compile(
+    r'''^\s*depends_on\(.*\bwhen\s*=\s*(["'])@develop\1.*\)\s*$'''
+)
+develop_when_pattern = re.compile(r'''(\bwhen\s*=\s*)(["'])@develop\2''')
+
+for index, line in reversed(list(enumerate(text))):
+    if develop_dependency_pattern.match(line):
+        branch_dependency = develop_when_pattern.sub(
+            lambda match: (
+                f"{match.group(1)}{match.group(2)}@{branch}{match.group(2)}"
+            ),
+            line,
+            count=1,
+        )
+        if all(
+            existing.strip() != branch_dependency.strip() for existing in text
+        ):
+            text.insert(index + 1, branch_dependency)
+            changed = True
+
+if changed:
     package_file.write_text("\n".join(text) + "\n")
